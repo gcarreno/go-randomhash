@@ -1,0 +1,78 @@
+# ====> Project
+
+# ====> Go
+# Compiled Object files, Static and Dynamic libs (Shared Objects)
+*.o
+*.a
+*.exe
+*.exe~
+*.dll
+*.so
+
+# Folders
+_obj
+_test
+
+# Architecture specific extensions/prefixes
+*.[568vq]
+[568vq].out
+
+*.cgo1.go
+*.cgo2.c
+_cgo_defun.c
+_cgo_gotypes.go
+_cgo_export.*
+
+_testmain.go
+
+*.dylib
+*.zip
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# Go workspace file
+go.work
+
+# vim
+**.swp
+
+*.hex
+*.db
+*.bin
+
+*.idea
+profile.cov
+profile.tmp
+
+.DS_Store
+*.pem
+
+# ====> Sublime Text
+# Sublime Text Project and Workspace Files
+*.sublime-workspace
+*.sublime-project
+
+# ====> VS Code
+# VS Code Config Files
+.vscode/
+
+# ====> IntelliJ
+.idea/
+
+# log files for monitoring or debugging
+*.log
+
+
+# go debug test cache
+*.test
+
+# gmsm test cache
+ifile
+ofile
