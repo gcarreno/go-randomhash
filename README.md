@@ -11,4 +11,5 @@ A Go version of the cryptocoin's proof of work `RandomHash`.
 
 Since there's not an official specification for `RandomHash`, in contrast to `RandomX`, this is my interpretation of it's main idea.
 
-It has entropy measures that include random calls to `XOR`, `AND`, `RotateLeft`, `FlipBits` and `ReverseBytes`.
+It has entropy measures that include random calls to `XOR`, `AND`, `RotateLeft`, `FlipBits` and `ReverseBytes`.\
+Ideally, this will make `GPU`/`ASIC` sweat a little. Srill.. Needs confirmation :smile:
