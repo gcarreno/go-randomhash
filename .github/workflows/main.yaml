@@ -1,4 +1,4 @@
-name: fp-humanize
+name: go-randomhash
 
 defaults:
   run:
