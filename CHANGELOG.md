@@ -19,5 +19,5 @@ Notable changes up to the last release.
 
 ## New Contributors ❤️
 
-* @gcarreno made their first contribution
+* [@gcarreno](https://github.com/gcarreno) made their first contribution
 
