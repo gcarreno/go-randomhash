@@ -1,6 +1,7 @@
 # Go RandomHash
 
-[![Build Status](https://github.com/gcarreno%%/go-randomhash%%/actions/workflows/main.yaml/badge.svg?branch=main)](https://github.com/gcarreno%%/go-randomhash%%/actions)[![Supports Windows](https://img.shields.io/badge/support-Windows-blue?logo=Windows)](https://github.com/gcarreno/go-randomhash/releases/latest)
+[![Build Status](https://github.com/gcarreno/go-randomhash/actions/workflows/main.yaml/badge.svg?branch=main)](https://github.com/gcarreno/go-randomhash/actions)
+[![Supports Windows](https://img.shields.io/badge/support-Windows-blue?logo=Windows)](https://github.com/gcarreno/go-randomhash/releases/latest)
 [![Supports Linux](https://img.shields.io/badge/support-Linux-yellow?logo=Linux)](https://github.com/gcarreno/go-randomhash/releases/latest)
 [![Supports macOS](https://img.shields.io/badge/support-macOS-black?logo=macOS)](https://github.com/gcarreno/go-randomhash/releases/latest)
 [![License](https://img.shields.io/github/license/gcarreno/go-randomhash)](https://github.com/gcarreno/go-randomhash/blob/main/LICENSE)
