@@ -1,19 +1,23 @@
-# Changelog
+# Change Log
 
-All notable changes to this project will be documented in this file.
+Notable changes up to the last release.
 
 ## [0.0.1] - 2025-07-03
 
-### 🚀 Features
+### ⛰️  Features
 
-- First working version
+- First working version - ([2236637](https://github.com/gcarreno/go-randomhash/commit/2236637bdeab1d99c4af85cfb4e658102865c687))
 
 ### 📚 Documentation
 
-- *(README)* Just a bit more explanation
-- *(README)* Typo fixed
+- *(README)* Typo fixed - ([eff22fd](https://github.com/gcarreno/go-randomhash/commit/eff22fdecc77316cc7bfd935d82f39bebb507586))
+- *(README)* Just a bit more explanation - ([b087a4d](https://github.com/gcarreno/go-randomhash/commit/b087a4d71a0a75312a8614b5eca18dc4adfc9869))
 
 ### ⚙️ Miscellaneous Tasks
 
-- Initial commit
+- Initial commit - ([86b688a](https://github.com/gcarreno/go-randomhash/commit/86b688a5064d665e79ac840af848b726d9dccace))
+
+## New Contributors ❤️
+
+* @gcarreno made their first contribution
 
