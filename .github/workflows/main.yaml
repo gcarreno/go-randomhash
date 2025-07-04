@@ -1,0 +1,78 @@
+name: fp-humanize
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: write
+
+on:
+
+  push:
+    branches: [ main ]
+    tags: [ "*" ]
+    paths-ignore: [ "README.md", "CHANGELOG.md", "cliff.toml" ]
+
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  test:
+    name: Test go-randomhash
+    runs-on: ${{ matrix.operating-system }}
+
+    strategy:
+      matrix:
+        operating-system: [ ubuntu-latest, windows-latest, macos-latest ]
+      fail-fast: true
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        submodules: true
+
+    - name: Install Go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: './go.mod'
+        check-latest: true
+#        go-version: 'stable'
+
+    - name: Run the tests
+      run: ./run_tests.sh -d ./tests
+
+  release:
+    if: contains(github.ref_type, 'tag')
+
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: [ test ]
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        submodules: true
+
+    - name: Set env
+      run: echo "tag=${{ github.ref_name }}" >> "$GITHUB_ENV"
+
+    - name: Generate Release Notes
+      id: git-cliff
+      uses: orhun/git-cliff-action@v4
+      with:
+        config: cliff.toml
+        args: --latest --strip header
+
+    - name: Create GitHub release
+      uses: softprops/action-gh-release@v2
+      with:
+        name: go-randomhash ${{ env.tag }}
+        body: ${{ steps.git-cliff.outputs.content }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
