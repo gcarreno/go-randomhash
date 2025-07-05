@@ -6,9 +6,7 @@ import (
 	"bytes"
 	"crypto/rand"
 	"encoding/hex"
-	"fmt"
 	"testing"
-	"time"
 
 	randomhash "github.com/gcarreno/go-randomhash"
 )
@@ -38,7 +36,7 @@ var testVectors = []TestVector{
 	// Add more
 }
 
-func TestRandomHashVectorsVersion1(t *testing.T) {
+func TestRandomHashVectorsWithVersion1(t *testing.T) {
 	for _, tv := range testVectors {
 		got := randomhash.RandomHash(tv.Input, tv.Nonce, randomhash.Version1)
 		if hex.EncodeToString(got) != tv.Output {
@@ -52,45 +50,11 @@ func TestRandomHashVectorsVersion1(t *testing.T) {
 	}
 }
 
-func fuzzRandomHashVersion1(rounds int, minSize int, maxSize int) {
-	failCount := 0
-	start := time.Now()
-
-	for i := 0; i < rounds; i++ {
-		// 🔀 Random input length between minSize and maxSize
-		inputLen := minSize + randInt(maxSize-minSize+1)
-		input := randomBytes(inputLen)
-
-		// 🎲 Random nonce
-		nonce := randInt63()
-
-		// ⛏️ First run
-		hash1 := randomhash.RandomHash(input, nonce, randomhash.Version1)
-
-		// 🧪 Re-run with same input and nonce to test determinism
-		hash2 := randomhash.RandomHash(input, nonce, randomhash.Version1)
-
-		if !bytes.Equal(hash1, hash2) {
-			failCount++
-			fmt.Printf("FAIL @ iteration %d:\nInput: %x\nNonce: %d\nHash1: %x\nHash2: %x\n\n",
-				i, input, nonce, hash1, hash2)
-		}
-
-		if i%100 == 0 && i != 0 {
-			fmt.Printf("Fuzzed %d rounds... all stable so far 😎\n", i)
-		}
-	}
-
-	elapsed := time.Since(start)
-	fmt.Printf("\nFuzz complete.\nRounds: %d\nFailures: %d\nElapsed: %s\n",
-		rounds, failCount, elapsed)
-}
-
 // ---
 // 🧪 1. Fuzz-style determinism test
 // ---
 
-func TestRandomHashDeterminismVersion1(t *testing.T) {
+func TestRandomHashDeterminismWithVersion1(t *testing.T) {
 	const rounds = 10_000
 	const minSize = 8
 	const maxSize = 128
@@ -114,12 +78,12 @@ func TestRandomHashDeterminismVersion1(t *testing.T) {
 // ⚡ 2. Benchmark with various input sizes
 // ---
 
-func BenchmarkRandomHash_32Bytes(b *testing.B)  { benchWithInputSizeVersion1(b, 32) }
-func BenchmarkRandomHash_64Bytes(b *testing.B)  { benchWithInputSizeVersion1(b, 64) }
-func BenchmarkRandomHash_128Bytes(b *testing.B) { benchWithInputSizeVersion1(b, 128) }
-func BenchmarkRandomHash_256Bytes(b *testing.B) { benchWithInputSizeVersion1(b, 256) }
+func BenchmarkRandomHash_32Bytes(b *testing.B)  { benchWithInputSizeWithVersion1(b, 32) }
+func BenchmarkRandomHash_64Bytes(b *testing.B)  { benchWithInputSizeWithVersion1(b, 64) }
+func BenchmarkRandomHash_128Bytes(b *testing.B) { benchWithInputSizeWithVersion1(b, 128) }
+func BenchmarkRandomHash_256Bytes(b *testing.B) { benchWithInputSizeWithVersion1(b, 256) }
 
-func benchWithInputSizeVersion1(b *testing.B, size int) {
+func benchWithInputSizeWithVersion1(b *testing.B, size int) {
 	input := randomBytes(size)
 	nonce := int64(42)
 
