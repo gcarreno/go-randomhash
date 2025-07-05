@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/gcarreno/go-randomhash"
+	randomhash "github.com/gcarreno/go-randomhash"
 )
 
 type TestVector struct {
@@ -23,14 +23,24 @@ var testVectors = []TestVector{
 	{
 		Input:  []byte("hello"),
 		Nonce:  12345,
-		Output: "816005612490569189810604011548ac60085141008a921078904c1000a06042", // this would be from a known output
+		Output: "bc5760421118464abc929b3811555a8669cacdcf41378500c5e1a848628336f0", // this would be from a known output
+	},
+	{
+		Input:  []byte("Hello, World!"),
+		Nonce:  12345,
+		Output: "18bf19d7f24c8689f5eb71b9710225a05681b05304698c3c8ef1e4ab50f68025", // this would be from a known output
+	},
+	{
+		Input:  []byte("Hello, World! 😎"),
+		Nonce:  12345,
+		Output: "7922ea47a65a950f18b0e3827a7e8de091e1d8585644fbe7e8268865631adb64", // this would be from a known output
 	},
 	// Add more
 }
 
-func TestRandomHashVectors(t *testing.T) {
+func TestRandomHashVectorsVersion1(t *testing.T) {
 	for _, tv := range testVectors {
-		got := randomhash.RandomHash(tv.Input, tv.Nonce)
+		got := randomhash.RandomHash(tv.Input, tv.Nonce, randomhash.Version1)
 		if hex.EncodeToString(got) != tv.Output {
 			t.Errorf("Input: %q Nonce: %d\nExpected: %s\nGot:      %x",
 				tv.Input,
@@ -42,7 +52,7 @@ func TestRandomHashVectors(t *testing.T) {
 	}
 }
 
-func fuzzRandomHash(rounds int, minSize int, maxSize int) {
+func fuzzRandomHashVersion1(rounds int, minSize int, maxSize int) {
 	failCount := 0
 	start := time.Now()
 
@@ -55,10 +65,10 @@ func fuzzRandomHash(rounds int, minSize int, maxSize int) {
 		nonce := randInt63()
 
 		// ⛏️ First run
-		hash1 := randomhash.RandomHash(input, nonce)
+		hash1 := randomhash.RandomHash(input, nonce, randomhash.Version1)
 
 		// 🧪 Re-run with same input and nonce to test determinism
-		hash2 := randomhash.RandomHash(input, nonce)
+		hash2 := randomhash.RandomHash(input, nonce, randomhash.Version1)
 
 		if !bytes.Equal(hash1, hash2) {
 			failCount++
@@ -80,7 +90,7 @@ func fuzzRandomHash(rounds int, minSize int, maxSize int) {
 // 🧪 1. Fuzz-style determinism test
 // ---
 
-func TestRandomHashDeterminism(t *testing.T) {
+func TestRandomHashDeterminismVersion1(t *testing.T) {
 	const rounds = 10_000
 	const minSize = 8
 	const maxSize = 128
@@ -90,8 +100,8 @@ func TestRandomHashDeterminism(t *testing.T) {
 		input := randomBytes(inputLen)
 		nonce := randInt63()
 
-		hash1 := randomhash.RandomHash(input, nonce)
-		hash2 := randomhash.RandomHash(input, nonce)
+		hash1 := randomhash.RandomHash(input, nonce, randomhash.Version1)
+		hash2 := randomhash.RandomHash(input, nonce, randomhash.Version1)
 
 		if !bytes.Equal(hash1, hash2) {
 			t.Errorf("[FAIL #%d]\nInput: %s\nNonce: %d\nHash1: %x\nHash2: %x\n",
@@ -104,18 +114,18 @@ func TestRandomHashDeterminism(t *testing.T) {
 // ⚡ 2. Benchmark with various input sizes
 // ---
 
-func BenchmarkRandomHash_32Bytes(b *testing.B)  { benchWithInputSize(b, 32) }
-func BenchmarkRandomHash_64Bytes(b *testing.B)  { benchWithInputSize(b, 64) }
-func BenchmarkRandomHash_128Bytes(b *testing.B) { benchWithInputSize(b, 128) }
-func BenchmarkRandomHash_256Bytes(b *testing.B) { benchWithInputSize(b, 256) }
+func BenchmarkRandomHash_32Bytes(b *testing.B)  { benchWithInputSizeVersion1(b, 32) }
+func BenchmarkRandomHash_64Bytes(b *testing.B)  { benchWithInputSizeVersion1(b, 64) }
+func BenchmarkRandomHash_128Bytes(b *testing.B) { benchWithInputSizeVersion1(b, 128) }
+func BenchmarkRandomHash_256Bytes(b *testing.B) { benchWithInputSizeVersion1(b, 256) }
 
-func benchWithInputSize(b *testing.B, size int) {
+func benchWithInputSizeVersion1(b *testing.B, size int) {
 	input := randomBytes(size)
 	nonce := int64(42)
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = randomhash.RandomHash(input, nonce)
+		_ = randomhash.RandomHash(input, nonce, randomhash.Version1)
 	}
 }
 

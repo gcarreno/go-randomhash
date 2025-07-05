@@ -6,14 +6,26 @@ import (
 	"github.com/gcarreno/go-randomhash/hashfunctions"
 )
 
-type HashFunc func([]byte) []byte
+type (
+	HashVersion int
+	HashFunc    func([]byte) []byte
+)
 
-var hashFuncs = []HashFunc{
-	hashfunctions.SHA2_256,
-	hashfunctions.SHA2_512,
-	hashfunctions.BLAKE2B_512,
-	hashfunctions.SHA3_256,
-}
+const (
+	Version1 HashVersion = iota
+	// Version2
+
+	DefaultHashRound = 5
+)
+
+var (
+	hashFuncs = []HashFunc{
+		hashfunctions.SHA2_256,
+		hashfunctions.SHA2_512,
+		hashfunctions.BLAKE2B_512,
+		hashfunctions.SHA3_256,
+	}
+)
 
 func xorBytes(a, b []byte) []byte {
 	n := min(len(a), len(b))
@@ -75,12 +87,21 @@ func shuffledHashFuncs(seed int64) []HashFunc {
 	return clone
 }
 
-func RandomHash(input []byte, nonce int64) []byte {
+func RandomHash(input []byte, nonce int64, version HashVersion) []byte {
+	switch version {
+	case Version1:
+		return randomHashVersion1(input, nonce)
+	default:
+		return nil
+	}
+}
+
+func randomHashVersion1(input []byte, nonce int64) []byte {
 	rnd := rand.New(rand.NewSource(nonce))
 	funcs := shuffledHashFuncs(nonce)
 	state := input
 	prev := input
-	steps := len(hashFuncs) + rnd.Intn(len(hashFuncs))
+	steps := DefaultHashRound + rnd.Intn(DefaultHashRound)
 
 	for i := 0; i < steps; i++ {
 		hfn := funcs[i%len(funcs)]
